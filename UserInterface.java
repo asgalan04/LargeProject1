@@ -1,6 +1,7 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 import model.Song;
 import model.Album;
 import model.LibraryModel;
@@ -15,10 +16,7 @@ public class UserInterface {
 	 */
 	private void printSongs(ArrayList<Song> songs) {
 		for (Song s : songs) {
-			String printedString = "Song: " + s.getName()
-									+ " by " + s.getArtist()
-									 + " from the album " + s.getAlbum();
-			System.out.println(printedString);
+			System.out.println(s.toString());
 		}
 	}
 	
@@ -60,9 +58,7 @@ public class UserInterface {
 	 */
 	private void printAlbums(ArrayList<Album> albums) {
 		for (Album a : albums) {
-			System.out.println("Album: " + a.getName()
-								+ " by " + a.getArtist()
-								+ " from the year " + a.getYear());
+			System.out.println(a.toString());
 			for (Song s : a.getSongs()) {
 				System.out.println(s.getName());
 			}
@@ -301,6 +297,10 @@ public class UserInterface {
 		}
 	}
 	
+	/*
+	 * Method: removePlaylist(name)
+	 * Purpose: remove a playlist from the user library
+	 */
 	private void removePlaylist(String name) {
 		if (userLib.removePlaylist(name)) {
 			System.out.println("Playlist successfully removed.");
@@ -309,6 +309,10 @@ public class UserInterface {
 		}
 	}
 	
+	/*
+	 * Method: printManual
+	 * Purpose: print the command manual to the user
+	 */
 	private void printManual() {
 		System.out.println("------------------------");
 		System.out.println("   List of commands");
@@ -330,18 +334,152 @@ public class UserInterface {
 		System.out.println("  'printPlaylist <playlistName>' - prints all songs in playlist 'playlistName'.");
 		System.out.println("  'printFavorites' - prints all favorited songs in user library.\n");
 		System.out.println("RATING");
-		System.out.println("  'favoriteSong <songName> <songArtist> <favorite/unfavorite>' - favorites/unfavorites a song with name 'songName' and 'songArtist'.");
-		System.out.println("  'rateSong <songName> <songArtist> <rating (1-5)>' - rates a song (1-5) with name 'songName' and 'songArtist'.");
+		System.out.println("  'favoriteSong <songName>, <songArtist>, <favorite/unfavorite>' - favorites/unfavorites a song with name 'songName' and 'songArtist'.");
+		System.out.println("  'rateSong <songName> <songArtist> <rating (1-5)>' - rates a song (1-5) with name 'songName' and 'songArtist'.\n");
+		System.out.println("TYPE 'quit' TO QUIT");
 		System.out.println("------------------------");
 	}
 	
 	private void inputHandler() {
 		
+		Scanner input = new Scanner(System.in);
+		
+		System.out.println("Welcome to your music library. Type 'manual' or 'help' for a list of commands. Type 'quit' to exit.");
+		
+		while (input.hasNext()) {
+			String userInput = input.nextLine();
+			
+			if (userInput.toLowerCase().equals("quit")) {
+				break;
+			}
+			
+			// MANUAL
+			if (userInput.toLowerCase().equals("manual") || userInput.toLowerCase().equals("help")) {
+				this.printManual();
+				
+			// FIND SONG TITLE
+			} else if (userInput.substring(0, 13).equals("findSongTitle")) {
+				userInput = userInput.substring(13).strip();
+				this.searchSongTitle(userInput);
+			
+			// FIND SONG ARTIST
+			} else if (userInput.substring(0, 14).equals("findSongArtist")) {
+				userInput = userInput.substring(14).strip();
+				this.searchSongArtist(userInput);
+				
+			// FIND ALBUM TITLE
+			} else if (userInput.substring(0, 14).equals("findAlbumTitle")) {
+				userInput = userInput.substring(14).strip();
+				this.searchAlbumTitle(userInput);
+				
+			// FIND ALBUM ARTIST
+			} else if (userInput.substring(0, 15).equals("findAlbumArtist")) {
+				userInput = userInput.substring(15).strip();
+				this.searchAlbumArtist(userInput);
+				
+			// ADD SONG
+			} else if (userInput.substring(0, 7).equals("addSong")) {
+				userInput = userInput.substring(7).strip();
+				this.addSongToLibrary(userInput);
+				
+			// ADD ALBUM
+			} else if (userInput.substring(0, 8).equals("addAlbum")) {
+				userInput = userInput.substring(8).strip();
+				this.addAlbumToLibrary(userInput);
+				
+			// ADD PLAYLIST
+			} else if (userInput.substring(0, 11).equals("addPlaylist")) {
+				userInput = userInput.substring(11).strip();
+				this.addPlaylist(userInput);
+				
+			// REMOVE PLAYLIST
+			} else if (userInput.substring(0, 14).equals("removePlaylist")) {
+				userInput = userInput.substring(14).strip();
+				this.removePlaylist(userInput);
+				
+			// PRINT SONGS
+			} else if (userInput.substring(0, 10).equals("printSongs")) {
+				this.printSongs();
+				
+			// PRINT ALBUMS
+			} else if (userInput.substring(0, 11).equals("printAlbums")) {
+				this.printAlbums();
+				
+			// PRINT PLAYLISTS
+			} else if (userInput.substring(0, 14).equals("printPlaylists")) {
+				this.printPlaylists();
+				
+			// PRINT PLAYLIST
+			} else if (userInput.substring(0, 13).equals("printPlaylist")) {
+				userInput = userInput.substring(13).strip();
+				this.printSongsInPlaylist(userInput);
+				
+			// PRINT FAVORITES
+			} else if (userInput.substring(0, 14).equals("printFavorites")) {
+				this.printFavoriteSongs();
+				
+			// FAVORITE SONG
+			} else if (userInput.substring(0, 12).equals("favoriteSong")) {
+				userInput = userInput.substring(12).strip();
+				String[] args = userInput.split(",");
+				for (String arg : args) {
+					arg = arg.strip();
+				}
+				if (args.length == 3) {
+					if (args[3].toLowerCase().equals("favorite")) {
+						this.setFavorite(args[0], args[1], true);
+					} else if (args[3].toLowerCase().equals("unfavorite")) {
+						this.setFavorite(args[0], args[1], false);
+					} else {
+						System.out.print("Invalid argument 3. Chose 'favorite' or 'unfavorite'.");
+					}
+				} else {
+					System.out.println("Invalid arguments. Expected format: 'favoriteSong <songName>, <songArtist>, <favorite/unfavorite>'");
+				}
+				
+				
+			// RATE SONG
+			} else if (userInput.substring(0, 8).equals("rateSong")) {
+				userInput = userInput.substring(8).strip();
+				String[] args = userInput.split(",");
+				for (String arg : args) {
+					arg = arg.strip();
+				}
+				if (args.length == 3) {
+					if (isInteger(args[2])) {
+						int rating = Integer.parseInt(args[2]);
+						if (rating > 0 && rating <= 5) {
+							this.rateSong(args[0], args[1], rating);
+						} else {
+							System.out.println("Invalid rating input, must be in the range 1-5.");
+						}
+					} else {
+						System.out.println("Invalid rating input. Rating must be an integer.");
+					}
+				} else {
+					System.out.println("Invalid arguments. Expected format: 'rateSong <songName>, <songArtist>, <rating (1-5)>'");
+				}
+				
+			}
+		}
+		
+		System.out.println("Exiting your music library.");
+		input.close();
 	}
+	
+    private static boolean isInteger(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 	
 	public static void main(String[] args) {
 		
 		UserInterface ui = new UserInterface();
+		ui.inputHandler();
 		
 	}
 }

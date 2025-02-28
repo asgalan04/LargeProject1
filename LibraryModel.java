@@ -13,7 +13,7 @@ public class LibraryModel {
 	private MusicStore store;
 	
 	/*
-	 * Store needs: getSong(), getAlbums() - returns deep reference, searchAlbum() - search for and return copy of album
+	 * Store needs: getAlbums() - returns deep reference, searchAlbum() - search for and return copy of album
 	 * Album needs: getName(), getArtist(), getYear(), getSongs() - deep reference
 	 * addSong() - yes this makes mutable but we should be fine with references because I
 	 * create copies when adding albums to the user.
