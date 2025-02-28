@@ -1,4 +1,4 @@
-package Library;
+package model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,7 +43,6 @@ public class MusicStore {
 					album.getYear(),album.getGenre());
 			for(Song s: album.getSongs()) {
 				current.addSong(s);
-				
 			}
 			deepCopy.add(current);
 			

@@ -1,4 +1,4 @@
-package Library;
+package model;
 
 public class Song {
 	private String songName;
@@ -52,8 +52,18 @@ public class Song {
 	}
 
 	public String toString() {
-		return "Song name: "+songName+ "Author: "+authorName+"album name "+ album;
+		return "Song name: "+songName+ " Author: "+authorName+" album name "+ album;
 
+	}
+	
+	@Override
+	public boolean equals(Object s) {
+		Song song=(Song) s;
+		
+		if(song.getAlbum()==album && song.getAuthor()==authorName && song.getName()==songName) {
+			return true;
+		}
+		return false;
 	}
 
 
