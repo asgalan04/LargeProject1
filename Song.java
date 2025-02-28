@@ -52,7 +52,7 @@ public class Song {
 	}
 
 	public String toString() {
-		return "Song name: "+songName+ " Author: "+authorName+" album name "+ album;
+		return "Song name: '"+songName+ "'. Author: '"+authorName+"'. Album Name '"+ album + "'";
 
 	}
 	

@@ -27,13 +27,14 @@ public class MusicStore {
 			
 	}
 	
-	public Song searchSong(String songName) {
+	public ArrayList<Song> searchSong(String songName) {
+		ArrayList<Song> foundSongs = new ArrayList<Song>();
 		for(Album songs: albums) {
 			if(songs.getSong(songName)!=null) {
-				return songs.getSong(songName);
+				foundSongs.add(songs.getSong(songName));
 			}
 		}
-		return null;
+		return foundSongs;
 	}
 
 	public ArrayList<Album> getAlbums(){
@@ -51,7 +52,9 @@ public class MusicStore {
 	}
 	
 	//new object 
-	public Album searchAlbum(String albumName) {
+	public ArrayList<Album> searchAlbum(String albumName) {
+		ArrayList<Album> foundAlbums = new ArrayList<Album>();
+		
 		for (Album album: albums) {
 			if(album.getAlbumName().toLowerCase().equals(albumName.toLowerCase())) {
 				Album current=new Album(album.getAuthorName(),album.getAlbumName(),
@@ -60,10 +63,10 @@ public class MusicStore {
 					current.addSong(s);
 					
 				}
-				return current;
+				foundAlbums.add(current);
 			}
 		}
-		return null;
+		return foundAlbums;
 		
 	}
 	

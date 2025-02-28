@@ -146,11 +146,13 @@ public class LibraryModel {
 	 */
 	public boolean addSong(String title) {
 		
-		Song foundSong = store.searchSong(title);
+		ArrayList<Song> foundSongs = store.searchSong(title);
 		
-		if (foundSong == null) {
+		if (foundSongs.size() == 0) {
 			return false;
 		}
+		
+		Song foundSong = foundSongs.get(0);
 		
 		// If the album isn't in our library, we make it
 		if (!hasAlbum(foundSong.getAlbum())) {
@@ -180,11 +182,13 @@ public class LibraryModel {
 	 */
 	public boolean addAlbum(String title) {
 		
-		Album foundAlbum = store.searchAlbum(title);
+		ArrayList<Album> foundAlbums = store.searchAlbum(title);
 		
-		if (foundAlbum == null) {
+		if (foundAlbums.size() == 0) {
 			return false;
 		}
+		
+		Album foundAlbum = foundAlbums.get(0);
 		
 		boolean albumFlag = false;
 		for (Album a : albumList) {

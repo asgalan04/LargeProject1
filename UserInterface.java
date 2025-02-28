@@ -6,7 +6,7 @@ import model.*;
 
 public class UserInterface {
 	
-	LibraryModel userLib;
+	private LibraryModel userLib;
 	
 	private UserInterface() {
 		userLib = new LibraryModel();
@@ -101,7 +101,7 @@ public class UserInterface {
 	 */
 	private void searchStoreSongTitle(String title) {
 		
-		ArrayList<Song> foundSongs = userLib.getStore().searchSongTitle(title);
+		ArrayList<Song> foundSongs = userLib.getStore().searchSong(title);
 		
 		if (foundSongs.size() == 0) {
 			System.out.println("Song not found in store.");
@@ -133,7 +133,7 @@ public class UserInterface {
 	 */
 	private void searchStoreAlbumTitle(String title) {
 		
-		ArrayList<Album> foundAlbums = userLib.getStore().searchAlbumTitle(title);
+		ArrayList<Album> foundAlbums = userLib.getStore().searchAlbum(title);
 		
 		if (foundAlbums.size() == 0) {
 			System.out.println("Album not found in store.");
