@@ -38,6 +38,7 @@ public class LibraryModel {
 			Song songSearch = a.getSong(title);
 			if (songSearch != null) {
 				foundSongs.add(songSearch);
+				System.out.println("TEST searchSongTitle: " + Boolean.toString(songSearch.isFavorite()));
 			}
 		}
 		
@@ -298,6 +299,7 @@ public class LibraryModel {
 			for (Song s : a.getSongs()) {
 				if (s.isFavorite()) {
 					favSongs.add(s.getName());
+					System.out.println("TEST getFavoriteSongs: " + Boolean.toString(s.isFavorite()));
 				}
 			}
 		}
@@ -376,12 +378,11 @@ public class LibraryModel {
 	 */
 	public boolean rateSong(String songName, String artist, int rating) {
 		
-		ArrayList<Song> songsWithName = this.searchSongTitle(songName);
-		
-		for (Song s : songsWithName) {
-			if (s.getAuthor().toLowerCase().equals(artist.toLowerCase())) {
-				s.setRating(rating);
-				return true;
+		for (Album a : albumList) {
+			if (a.getSong(songName) != null) {
+				if (a.getSong(songName).getAuthor().toLowerCase().equals(artist.toLowerCase())) {
+					return a.rateSong(songName, rating);
+				}
 			}
 		}
 		
@@ -393,13 +394,12 @@ public class LibraryModel {
 	 * Purpose: search for a song by title and artist and set to favorite or unfavorite
 	 */
 	public boolean setFavorite(String songName, String artist, boolean favorite) {
-		
-		ArrayList<Song> songsWithName = this.searchSongTitle(songName);
-		
-		for (Song s : songsWithName) {
-			if (s.getAuthor().toLowerCase().equals(artist.toLowerCase())) {
-				s.setFavorite(favorite);
-				return true;
+
+		for (Album a : albumList) {
+			if (a.getSong(songName) != null) {
+				if (a.getSong(songName).getAuthor().toLowerCase().equals(artist.toLowerCase())) {
+					return a.setFavorite(songName, favorite);
+				}
 			}
 		}
 		

@@ -2,9 +2,7 @@ package view;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import model.Song;
-import model.Album;
-import model.LibraryModel;
+import model.*;
 
 public class UserInterface {
 	
@@ -100,6 +98,23 @@ public class UserInterface {
 		printAlbums(foundAlbums);
 	}
 	
+	private void searchPlaylist(String playlistName) {
+		ArrayList<Playlist> foundLists = userLib.searchPlaylist(playlistName);
+		
+		if (foundLists.size() == 0) {
+			System.out.println("Playlist not found in user's library.");
+			return;
+		}
+		
+		System.out.println("-----------------\n   Playlists\n-----------------");
+		
+		for (Playlist p : foundLists) {
+			System.out.println(p.getName());
+		}
+		
+		System.out.println("-----------------");
+	}
+	
 	/*
 	 * Method: addSongToLibrary(title)
 	 * Purpose: add a song to the users library
@@ -136,8 +151,6 @@ public class UserInterface {
 			System.out.print("No songs in library.");
 			return;
 		}
-		
-		System.out.println("TEST: " + songs.size());
 		
 		System.out.println("-----------------\n      Songs\n-----------------");
 		
@@ -339,6 +352,8 @@ public class UserInterface {
 		System.out.println("  'findSongArtist <artistName>' - prints information about a song with artist 'artistName'.");
 		System.out.println("  'findAlbumTitle <title>' - prints information about a album with name 'title'.");
 		System.out.println("  'findAlbumArtist <artistName>' - prints information about a album with artist 'artistName'.\n");
+		// search for playlist
+		// search the store
 		System.out.println("ADDING/REMOVING");
 		System.out.println("  'addSong <title>' - adds a song with name 'title' to user library if it is in the store.");
 		System.out.println("  'addAlbum <title>' - adds a album with name 'title' and its songs to user library if it is in the store.");
@@ -349,6 +364,7 @@ public class UserInterface {
 		System.out.println("LISTING");
 		System.out.println("  'printSongs' - prints all songs in user library.");
 		System.out.println("  'printAlbums' - prints all albums in user library.");
+		System.out.println("  'printArtists' - prints all artists in user library.");
 		System.out.println("  'printPlaylists' - prints all playlist names in user library.");
 		System.out.println("  'printPlaylist <playlistName>' - prints all songs in playlist 'playlistName'.");
 		System.out.println("  'printFavorites' - prints all favorited songs in user library.\n");
@@ -387,7 +403,11 @@ public class UserInterface {
 			// PRINT ALBUMS
 			} else if (commandArgs[0].equals("printAlbums")) {
 				this.printAlbums();
-				
+			
+			// PRINT ARTISTS
+			} else if (commandArgs[0].equals("printArtists")) {
+				this.printArtists();
+
 			// PRINT PLAYLISTS
 			} else if (commandArgs[0].equals("printPlaylists")) {
 				this.printPlaylists();

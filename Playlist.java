@@ -23,11 +23,13 @@ public class Playlist {
 		songs.add(s);
 	}
 	
-	public void removeSong(String title) {
+	public boolean removeSong(String title) {
 		for (Song s : songs) {
-			if (s.getName().equals(title)) {
+			if (s.getName().toLowerCase().equals(title.toLowerCase())) {
 				songs.remove(s);
+				return true;
 			}
 		}
+		return false;
 	}
 }

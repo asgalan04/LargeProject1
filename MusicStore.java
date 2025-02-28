@@ -13,7 +13,7 @@ public class MusicStore {
 		albums=new ArrayList<Album>();
 		ArrayList<File> curr=new ArrayList<File>();
 		try {
-			curr=processAlbums("albums.txt");
+			curr=processAlbums("src/albumFiles/albums.txt");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -90,7 +90,7 @@ public class MusicStore {
 		Scanner scan=new Scanner(file);
 		while(scan.hasNextLine()) {
 			String[] names=scan.nextLine().split(",");
-			fileNames.add(new File(names[0]+"_"+names[1]+".txt"));
+			fileNames.add(new File("src/albumFiles/"+names[0]+"_"+names[1]+".txt"));
 		}
 		return fileNames;
 		

@@ -53,7 +53,10 @@ public class Album {
 	public Song getSong(String songName) {
 		for (Song song: songsCollection) {
 			if(song.getName().toLowerCase().equals(songName.toLowerCase())) {
-				return new Song(song.getName(),song.getAuthor(),song.getAlbum());
+				Song newSong = new Song(song.getName(),song.getAuthor(),song.getAlbum());
+				newSong.setFavorite(song.isFavorite());
+				newSong.setRating(song.getRating());
+				return newSong;
 			}
 		}
 		
@@ -90,6 +93,26 @@ public class Album {
 			curr.add(newSong);
 		}
 		return curr;
+	}
+	
+	public boolean setFavorite(String songName, boolean favorite) {
+		for (Song s : songsCollection) {
+			if (s.getName().toLowerCase().equals(songName.toLowerCase())) {
+				s.setFavorite(favorite);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean rateSong(String songName, int rating) {
+		for (Song s : songsCollection) {
+			if (s.getName().toLowerCase().equals(songName.toLowerCase())) {
+				s.setRating(rating);
+				return true;
+			}
+		}
+		return false;
 	}
 	/*
 	 * Compares if to albums are the same
