@@ -1,47 +1,80 @@
 package Library;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Album {
 	private String authorName;
 	private String albumName;
-	// Hashmaps to look for things faster
-	private HashMap<String, Song> songsCollection;
+	private final int year;
+	private String genre;
+	private ArrayList<Song> songsCollection;
 
-	public Album(String authorName, String albumName) {
+
+	public Album(String authorName, String albumName,int year,String genre) {
+		this.genre=genre;
 		this.authorName = authorName;
 		this.albumName = albumName;
-		songsCollection = new HashMap<String, Song>();
+		this.year=year;
+		
+		songsCollection = new ArrayList<Song>();
+
+	}
+	
+	
+
+	public void addSong(Song song) {
+		songsCollection.add(song);
 
 	}
 
-	public void addSong(String songName) {
-		if (songName == null || songName.isEmpty()) {
-			System.out.println("Somethis is wrong in the addsongMethod");
-			return;
-		}
-		songsCollection.put(songName, new Song(songName));
 
-	}
-
-	// prints all of the album
 	public String toString() {
 		String message = "";
-		message += "The author of the album is" + authorName + " the name of the album is " + albumName;
-		for (String song : songsCollection.keySet()) {
-			message += song + "\n";
+		message += "Album : " + albumName + " by "+ authorName+ ", Genre "+genre+
+				" From the year : "+ year+"\n" ;
+		for (Song song : songsCollection) {
+			message += song.getName() + "\n";
 		}
 		return message;
 
 	}
 
 	public Song getSong(String songName) {
-		if (songsCollection.containsKey(songName)) {
-			return songsCollection.get(songName);
+		for (Song song: songsCollection) {
+			if(song.getName().toLowerCase().equals(songName.toLowerCase())) {
+				return new Song(song.getName(),song.getAuthor(),song.getAlbum());
+			}
 		}
-		System.out.print("song not found in album");
+		
 		return null;
+		
 
 	}
+	
+	public String getAlbumName() {
+		return albumName;
+	}
+	
+	public String getAuthorName() {
+		return authorName;
+	}
+	
+	public String getGenre() {
+		return genre;
+	}
+	
+	public int getYear() {
+		return year;
+	}
+	
+	public ArrayList<Song> getSongs(){
+		ArrayList<Song>curr=new ArrayList<Song>(songsCollection);
+		for(Song s: songsCollection) {
+			curr.add(new Song(s.getName(),s.getAuthor(),s.getAlbum()));
+		}
+		return curr;
+	}
+
 
 }
