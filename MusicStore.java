@@ -84,6 +84,33 @@ public class MusicStore {
 		
 	}
 	
+	public ArrayList<Song> searchSongArtist(String artist) {
+		
+		ArrayList<Song> foundSongs = new ArrayList<Song>();
+		for (Album a : albums) {
+			if (a.getAuthorName().toLowerCase().equals(artist.toLowerCase())) {
+				for (Song s : a.getSongs()) {
+					foundSongs.add(s);
+				}
+			}
+		}
+
+		return foundSongs;
+	}
+	
+	
+    public ArrayList<Album> searchAlbumArtist(String artistName) {
+		
+		ArrayList<Album> foundAlbums = new ArrayList<Album>();
+		for (Album a : albums) {
+			if (a.getAuthorName().toLowerCase().equals(artistName.toLowerCase())) {
+				foundAlbums.add(a);
+			}
+		}
+		
+		return foundAlbums;
+	}
+	
 	public ArrayList<File> processAlbums(String fileName) throws FileNotFoundException {
 		ArrayList<File> fileNames=new ArrayList<File>();
 		File file=new File(fileName);
