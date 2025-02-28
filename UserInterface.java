@@ -10,6 +10,9 @@ public class UserInterface {
 	
 	LibraryModel userLib;
 	
+	private UserInterface() {
+		userLib = new LibraryModel();
+	}
 	/*
 	 * Method: printsongs(songs)
 	 * Purpose: print the songs in nice format from an input arraylist
@@ -134,6 +137,8 @@ public class UserInterface {
 			return;
 		}
 		
+		System.out.println("TEST: " + songs.size());
+		
 		System.out.println("-----------------\n      Songs\n-----------------");
 		
 		for (String s : songs) {
@@ -181,7 +186,7 @@ public class UserInterface {
 		System.out.println("------------------\n      Albums\n------------------");
 		
 		for (Album a : albums) {
-			System.out.println(a.getName() + " by " + a.getArtist());
+			System.out.println(a.getAlbumName() + " by " + a.getAuthorName());
 		}
 		
 		System.out.println("------------------");
@@ -240,7 +245,7 @@ public class UserInterface {
 		ArrayList<String> favSongs = userLib.getFavoriteSongs();
 		
 		if (favSongs.size() == 0) {
-			System.out.print("No favorite songs found.");
+			System.out.println("No favorite songs found.");
 			return;
 		}
 		
@@ -298,6 +303,18 @@ public class UserInterface {
 	}
 	
 	/*
+	 * Method: addToPlaylist
+	 * Purpose: adds a song to a specified playlist
+	 */
+	private void addToPlaylist(String playlistName, String songName, String artistName) {
+		if (userLib.addToPlaylist(playlistName, songName, artistName)) {
+			System.out.println("Successfully added playlist.");
+		} else {
+			System.out.println("Unable to add song. Playlist or song is not found in library.");
+		}
+	}
+	
+	/*
 	 * Method: removePlaylist(name)
 	 * Purpose: remove a playlist from the user library
 	 */
@@ -326,7 +343,9 @@ public class UserInterface {
 		System.out.println("  'addSong <title>' - adds a song with name 'title' to user library if it is in the store.");
 		System.out.println("  'addAlbum <title>' - adds a album with name 'title' and its songs to user library if it is in the store.");
 		System.out.println("  'addPlaylist <name>' - adds a new playlist with name 'name' to user library.");
-		System.out.println("  'removePlaylist <name>' - removes a playlist with name 'name' from user library.\n");
+		System.out.println("  'addToPlaylist <playlistName>, <songName>, <artistName>' - adds a song to playlist with name 'playlistName' in user library.");
+		System.out.println("  'removePlaylist <name>' - removes a playlist with name 'name' from user library.");
+		System.out.println("  'removeFromPlaylist <playlistName>, <songName>' - removes a song from playlist with name 'playlistName' and 'songName'.");
 		System.out.println("LISTING");
 		System.out.println("  'printSongs' - prints all songs in user library.");
 		System.out.println("  'printAlbums' - prints all albums in user library.");
@@ -348,118 +367,149 @@ public class UserInterface {
 		
 		while (input.hasNext()) {
 			String userInput = input.nextLine();
+			String[] commandArgs = userInput.split("\\s+", 2);
 			
-			if (userInput.toLowerCase().equals("quit")) {
+			if (commandArgs.length == 0) {
+				System.out.println("No command entered.");
+				
+			// SINGLE WORD COMMANDS
+			} else if (commandArgs[0].toLowerCase().equals("quit")) {
 				break;
-			}
-			
+				
 			// MANUAL
-			if (userInput.toLowerCase().equals("manual") || userInput.toLowerCase().equals("help")) {
+			} else if (commandArgs[0].toLowerCase().equals("manual") || commandArgs[0].toLowerCase().equals("help")) {
 				this.printManual();
 				
-			// FIND SONG TITLE
-			} else if (userInput.substring(0, 13).equals("findSongTitle")) {
-				userInput = userInput.substring(13).strip();
-				this.searchSongTitle(userInput);
-			
-			// FIND SONG ARTIST
-			} else if (userInput.substring(0, 14).equals("findSongArtist")) {
-				userInput = userInput.substring(14).strip();
-				this.searchSongArtist(userInput);
-				
-			// FIND ALBUM TITLE
-			} else if (userInput.substring(0, 14).equals("findAlbumTitle")) {
-				userInput = userInput.substring(14).strip();
-				this.searchAlbumTitle(userInput);
-				
-			// FIND ALBUM ARTIST
-			} else if (userInput.substring(0, 15).equals("findAlbumArtist")) {
-				userInput = userInput.substring(15).strip();
-				this.searchAlbumArtist(userInput);
-				
-			// ADD SONG
-			} else if (userInput.substring(0, 7).equals("addSong")) {
-				userInput = userInput.substring(7).strip();
-				this.addSongToLibrary(userInput);
-				
-			// ADD ALBUM
-			} else if (userInput.substring(0, 8).equals("addAlbum")) {
-				userInput = userInput.substring(8).strip();
-				this.addAlbumToLibrary(userInput);
-				
-			// ADD PLAYLIST
-			} else if (userInput.substring(0, 11).equals("addPlaylist")) {
-				userInput = userInput.substring(11).strip();
-				this.addPlaylist(userInput);
-				
-			// REMOVE PLAYLIST
-			} else if (userInput.substring(0, 14).equals("removePlaylist")) {
-				userInput = userInput.substring(14).strip();
-				this.removePlaylist(userInput);
-				
 			// PRINT SONGS
-			} else if (userInput.substring(0, 10).equals("printSongs")) {
+			} else if (commandArgs[0].equals("printSongs")) {
 				this.printSongs();
 				
 			// PRINT ALBUMS
-			} else if (userInput.substring(0, 11).equals("printAlbums")) {
+			} else if (commandArgs[0].equals("printAlbums")) {
 				this.printAlbums();
 				
 			// PRINT PLAYLISTS
-			} else if (userInput.substring(0, 14).equals("printPlaylists")) {
+			} else if (commandArgs[0].equals("printPlaylists")) {
 				this.printPlaylists();
 				
-			// PRINT PLAYLIST
-			} else if (userInput.substring(0, 13).equals("printPlaylist")) {
-				userInput = userInput.substring(13).strip();
-				this.printSongsInPlaylist(userInput);
-				
 			// PRINT FAVORITES
-			} else if (userInput.substring(0, 14).equals("printFavorites")) {
+			} else if (commandArgs[0].equals("printFavorites")) {
 				this.printFavoriteSongs();
 				
-			// FAVORITE SONG
-			} else if (userInput.substring(0, 12).equals("favoriteSong")) {
-				userInput = userInput.substring(12).strip();
-				String[] args = userInput.split(",");
-				for (String arg : args) {
-					arg = arg.strip();
-				}
-				if (args.length == 3) {
-					if (args[3].toLowerCase().equals("favorite")) {
-						this.setFavorite(args[0], args[1], true);
-					} else if (args[3].toLowerCase().equals("unfavorite")) {
-						this.setFavorite(args[0], args[1], false);
-					} else {
-						System.out.print("Invalid argument 3. Chose 'favorite' or 'unfavorite'.");
-					}
-				} else {
-					System.out.println("Invalid arguments. Expected format: 'favoriteSong <songName>, <songArtist>, <favorite/unfavorite>'");
-				}
+			} else if (commandArgs.length > 1) {
+				// FIND SONG TITLE
+				if (commandArgs[0].equals("findSongTitle")) {
+					userInput = commandArgs[1].strip();
+					this.searchSongTitle(userInput);
 				
-				
-			// RATE SONG
-			} else if (userInput.substring(0, 8).equals("rateSong")) {
-				userInput = userInput.substring(8).strip();
-				String[] args = userInput.split(",");
-				for (String arg : args) {
-					arg = arg.strip();
-				}
-				if (args.length == 3) {
-					if (isInteger(args[2])) {
-						int rating = Integer.parseInt(args[2]);
-						if (rating > 0 && rating <= 5) {
-							this.rateSong(args[0], args[1], rating);
+				// FIND SONG ARTIST
+				} else if (commandArgs[0].equals("findSongArtist")) {
+					userInput = commandArgs[1].strip();
+					this.searchSongArtist(userInput);
+					
+				// FIND ALBUM TITLE
+				} else if (commandArgs[0].equals("findAlbumTitle")) {
+					userInput = commandArgs[1].strip();
+					this.searchAlbumTitle(userInput);
+					
+				// FIND ALBUM ARTIST
+				} else if (commandArgs[0].equals("findAlbumArtist")) {
+					userInput = commandArgs[1].strip();
+					this.searchAlbumArtist(userInput);
+					
+				// ADD SONG
+				} else if (commandArgs[0].equals("addSong")) {
+					userInput = commandArgs[1].strip();
+					this.addSongToLibrary(userInput);
+					
+				// ADD ALBUM
+				} else if (commandArgs[0].equals("addAlbum")) {
+					userInput = commandArgs[1].strip();
+					this.addAlbumToLibrary(userInput);
+					
+				// ADD PLAYLIST
+				} else if (commandArgs[0].equals("addPlaylist")) {
+					userInput = commandArgs[1].strip();
+					this.addPlaylist(userInput);
+					
+				// REMOVE PLAYLIST
+				} else if (commandArgs[0].equals("removePlaylist")) {
+					userInput = commandArgs[1].strip();
+					this.removePlaylist(userInput);
+					
+				// PRINT PLAYLIST
+				} else if (commandArgs[0].equals("printPlaylist")) {
+					userInput = commandArgs[1].strip();
+					this.printSongsInPlaylist(userInput);
+					
+				// FAVORITE SONG
+				} else if (commandArgs[0].equals("favoriteSong")) {
+					userInput = commandArgs[1].strip();
+					String[] args = userInput.split(", ");
+					if (args.length == 3) {
+						if (args[2].toLowerCase().equals("favorite")) {
+							this.setFavorite(args[0], args[1], true);
+						} else if (args[2].toLowerCase().equals("unfavorite")) {
+							this.setFavorite(args[0], args[1], false);
 						} else {
-							System.out.println("Invalid rating input, must be in the range 1-5.");
+							System.out.print("Invalid argument 3. Chose 'favorite' or 'unfavorite'.");
 						}
 					} else {
-						System.out.println("Invalid rating input. Rating must be an integer.");
+						System.out.println("Invalid arguments. Expected format: 'favoriteSong <songName>, <songArtist>, <favorite/unfavorite>'");
 					}
-				} else {
-					System.out.println("Invalid arguments. Expected format: 'rateSong <songName>, <songArtist>, <rating (1-5)>'");
+					
+					
+				// RATE SONG
+				} else if (commandArgs[0].equals("rateSong")) {
+					userInput = commandArgs[1].strip();
+					String[] args = userInput.split(", ");
+					if (args.length == 3) {
+						if (isInteger(args[2])) {
+							int rating = Integer.parseInt(args[2]);
+							if (rating > 0 && rating <= 5) {
+								this.rateSong(args[0], args[1], rating);
+							} else {
+								System.out.println("Invalid rating input, must be in the range 1-5.");
+							}
+						} else {
+							System.out.println("Invalid rating input. Rating must be an integer.");
+						}
+					} else {
+						System.out.println("Invalid arguments. Expected format: 'rateSong <songName>, <songArtist>, <rating (1-5)>'");
+					}
+					
+				// ADD TO PLAYLIST
+				} else if (commandArgs[0].equals("addToPlaylist")) {
+					userInput = commandArgs[1].strip();
+					String[] args = userInput.split(", ");
+					if (args.length == 3) {
+						if (userLib.addToPlaylist(args[0], args[1], args[2])) {
+							System.out.println("Song successfully added.");
+						} else {
+							System.out.println("Unable to add song. Song or playlist not found in library.");
+						}
+					} else {
+						System.out.println("Invalid arguments. Expected format: 'addToPlaylist <playlistName>, <songName>, <artistName>'");
+					}
+					
+					
+				// REMOVE FROM PLAYLIST
+				} else if (commandArgs[0].equals("removeFromPlaylist")) {
+					userInput = commandArgs[1].strip();
+					String[] args = userInput.split(", ");
+					if (args.length == 2) {
+						if (userLib.removeFromPlaylist(args[0], args[1])) {
+							System.out.println("Song successfully removed.");
+						} else {
+							System.out.println("Unable to remove song. Song or playlist not found in library.");
+						}
+					} else {
+						System.out.println("Invalid arguments. Expected format: 'removeFromPlaylist <playlistName>, <songName>'");
+					}
+					
 				}
-				
+			} else {
+				System.out.println("Invalid command. Type 'manual' or 'help' for help.");
 			}
 		}
 		
