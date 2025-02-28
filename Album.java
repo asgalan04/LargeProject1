@@ -35,8 +35,8 @@ public class Album {
    
 	public String toString() {
 		String message = "";
-		message += "Album : " + albumName + " by "+ authorName+ ", Genre "+genre+
-				" From the year : "+ year+"\n" ;
+		message += "Album : '" + albumName + "' by '"+ authorName+ "', Genre '"+genre+
+				"'. From the year : "+ year+"\n" ;
 		for (Song song : songsCollection) {
 			message += song.getName() + "\n";
 		}
