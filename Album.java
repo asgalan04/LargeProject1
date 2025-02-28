@@ -1,4 +1,4 @@
-package Library;
+package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,13 +22,17 @@ public class Album {
 	}
 	
 	
-
+  
 	public void addSong(Song song) {
 		songsCollection.add(song);
 
 	}
 
-
+    /*
+     * returns the album as a string as albumName authorName Genre Year
+     * list of songs
+     */
+   
 	public String toString() {
 		String message = "";
 		message += "Album : " + albumName + " by "+ authorName+ ", Genre "+genre+
@@ -39,6 +43,12 @@ public class Album {
 		return message;
 
 	}
+	
+	/*
+	 * gets the song by name and returns a copy of the 
+	 * song object . null if song not found 
+	 * 
+	 */
 
 	public Song getSong(String songName) {
 		for (Song song: songsCollection) {
@@ -68,13 +78,38 @@ public class Album {
 		return year;
 	}
 	
+	/*
+	 * returns a deep copy of the arrayList of songs
+	 */
 	public ArrayList<Song> getSongs(){
-		ArrayList<Song>curr=new ArrayList<Song>(songsCollection);
+		ArrayList<Song>curr=new ArrayList<Song>();
 		for(Song s: songsCollection) {
-			curr.add(new Song(s.getName(),s.getAuthor(),s.getAlbum()));
+			Song newSong=new Song(s.getName(),s.getAuthor(),s.getAlbum());
+			newSong.setFavorite(s.isFavorite());
+			newSong.setRating(s.getRating());
+			curr.add(newSong);
 		}
 		return curr;
 	}
-
-
+	/*
+	 * Compares if to albums are the same
+	 */
+	@Override
+	public boolean equals(Object obj) {
+	    Album first = (Album) obj;
+	    if (first.getAlbumName().equals(albumName) && first.getAuthorName().equals(authorName) &&
+	    		first.getGenre().equals(genre) &&  first.getYear() == year) {
+	    	for (int i = 0; i < first.getSongs().size(); i++) {
+		        if (!first.getSongs().get(i).equals(songsCollection.get(i))) {
+		            return false;
+		        }
+	    }
+	    if (first.getSongs().size() != songsCollection.size()) {
+	   
+	}
+	    }
+		return true;
+	}
 }
+
+
