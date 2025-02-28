@@ -12,10 +12,10 @@ public class UserInterface {
 		userLib = new LibraryModel();
 	}
 	/*
-	 * Method: printsongs(songs)
+	 * Method: printSongList(songs)
 	 * Purpose: print the songs in nice format from an input arraylist
 	 */
-	private void printSongs(ArrayList<Song> songs) {
+	private void printSongList(ArrayList<Song> songs) {
 		for (Song s : songs) {
 			System.out.println(s.toString());
 		}
@@ -34,7 +34,7 @@ public class UserInterface {
 			return;
 		}
 		
-		printSongs(foundSongs);
+		printSongList(foundSongs);
 	}
 	
 	/*
@@ -50,19 +50,16 @@ public class UserInterface {
 			return;
 		}
 		
-		printSongs(foundSongs);
+		printSongList(foundSongs);
 	}
 	
 	/*
 	 * Method: printAlbums(albums)
 	 * Purpose: Take an arraylist of albums and print their attributes and contents
 	 */
-	private void printAlbums(ArrayList<Album> albums) {
+	private void printAlbumList(ArrayList<Album> albums) {
 		for (Album a : albums) {
 			System.out.println(a.toString());
-			for (Song s : a.getSongs()) {
-				System.out.println(s.getName());
-			}
 		}
 	}
 	
@@ -79,12 +76,12 @@ public class UserInterface {
 			return;
 		}
 		
-		printAlbums(foundAlbums);
+		printAlbumList(foundAlbums);
 	}
 	
 	/*
-	 * Method: searchAlbumTitle(title)
-	 * Purpose: communicate with library to find a album by title and print its output
+	 * Method: searchAlbumArtist(artist)
+	 * Purpose: communicate with library to find a album by artist and print its output
 	 */
 	private void searchAlbumArtist(String artist) {
 		
@@ -95,7 +92,71 @@ public class UserInterface {
 			return;
 		}
 		
-		printAlbums(foundAlbums);
+		printAlbumList(foundAlbums);
+	}
+	
+	/*
+	 * Method: searchStoreSongTitle(title)
+	 * Purpose: search the store for a song.
+	 */
+	private void searchStoreSongTitle(String title) {
+		
+		ArrayList<Song> foundSongs = userLib.getStore().searchSongTitle(title);
+		
+		if (foundSongs.size() == 0) {
+			System.out.println("Song not found in store.");
+			return;
+		}
+		
+		printSongList(foundSongs);
+	}
+	
+	/*
+	 * Method: searchStoreSongArtist(artist)
+	 * Purpose: search the store for a song.
+	 */
+	private void searchStoreSongArtist(String artist) {
+		
+		ArrayList<Song> foundSongs = userLib.getStore().searchSongArtist(artist);
+		
+		if (foundSongs.size() == 0) {
+			System.out.println("Artist not found in store.");
+			return;
+		}
+		
+		printSongList(foundSongs);
+	}
+	
+	/*
+	 * Method: searchStoreAlbumTitle(title)
+	 * Purpose: search the store for an album
+	 */
+	private void searchStoreAlbumTitle(String title) {
+		
+		ArrayList<Album> foundAlbums = userLib.getStore().searchAlbumTitle(title);
+		
+		if (foundAlbums.size() == 0) {
+			System.out.println("Album not found in store.");
+			return;
+		}
+		
+		printAlbumList(foundAlbums);
+	}
+	
+	/*
+	 * Method: searchStoreAlbumArtist(artist)
+	 * Purpose: search the store for an album
+	 */
+	private void searchStoreAlbumArtist(String artist) {
+		
+		ArrayList<Album> foundAlbums = userLib.getStore().searchAlbumArtist(artist);
+		
+		if (foundAlbums.size() == 0) {
+			System.out.println("Album not found in store.");
+			return;
+		}
+		
+		printAlbumList(foundAlbums);
 	}
 	
 	private void searchPlaylist(String playlistName) {
@@ -106,13 +167,15 @@ public class UserInterface {
 			return;
 		}
 		
-		System.out.println("-----------------\n   Playlists\n-----------------");
+		System.out.println("-----------------\n   Playlist\n-----------------");
 		
 		for (Playlist p : foundLists) {
 			System.out.println(p.getName());
 		}
 		
-		System.out.println("-----------------");
+		for (Playlist p : foundLists) {
+			this.printSongsInPlaylist(p.getName());
+		}
 	}
 	
 	/*
@@ -351,8 +414,12 @@ public class UserInterface {
 		System.out.println("  'findSongTitle <title>' - prints information about a song with name 'title'.");
 		System.out.println("  'findSongArtist <artistName>' - prints information about a song with artist 'artistName'.");
 		System.out.println("  'findAlbumTitle <title>' - prints information about a album with name 'title'.");
-		System.out.println("  'findAlbumArtist <artistName>' - prints information about a album with artist 'artistName'.\n");
-		// search for playlist
+		System.out.println("  'findAlbumArtist <artistName>' - prints information about a album with artist 'artistName'.");
+		System.out.println("  'findPlaylist <title>' - prints a found playlist with name 'title' and its songs.");
+		System.out.println("  'searchStoreSongTitle <title>' - searches the store for a song with name 'title'.");
+		System.out.println("  'searchStoreSongArtist <artist>' - searches the store for songs with artist 'artist'.");
+		System.out.println("  'searchStoreAlbumTitle <title>' - searches the store for a album with name 'title'.");
+		System.out.println("  'searchStoreAlbumArtist <artist>' - searches the store for albums with artist 'artist'.\n");
 		// search the store
 		System.out.println("ADDING/REMOVING");
 		System.out.println("  'addSong <title>' - adds a song with name 'title' to user library if it is in the store.");
@@ -360,7 +427,7 @@ public class UserInterface {
 		System.out.println("  'addPlaylist <name>' - adds a new playlist with name 'name' to user library.");
 		System.out.println("  'addToPlaylist <playlistName>, <songName>, <artistName>' - adds a song to playlist with name 'playlistName' in user library.");
 		System.out.println("  'removePlaylist <name>' - removes a playlist with name 'name' from user library.");
-		System.out.println("  'removeFromPlaylist <playlistName>, <songName>' - removes a song from playlist with name 'playlistName' and 'songName'.");
+		System.out.println("  'removeFromPlaylist <playlistName>, <songName>' - removes a song from playlist with name 'playlistName' and 'songName'.\n");
 		System.out.println("LISTING");
 		System.out.println("  'printSongs' - prints all songs in user library.");
 		System.out.println("  'printAlbums' - prints all albums in user library.");
@@ -436,6 +503,31 @@ public class UserInterface {
 				} else if (commandArgs[0].equals("findAlbumArtist")) {
 					userInput = commandArgs[1].strip();
 					this.searchAlbumArtist(userInput);
+					
+				// FIND PLAYLIST
+				} else if (commandArgs[0].equals("findPlaylist")) {
+					userInput = commandArgs[1].strip();
+					this.searchPlaylist(userInput);
+					
+				// SEARCH THE STORE FOR SONG BY TITLE
+				} else if (commandArgs[0].equals("searchStoreSongTitle")) {
+					userInput = commandArgs[1].strip();
+					this.searchStoreSongTitle(userInput);
+					
+				// SEARCH THE STORE FOR SONG BY ARTIST
+				} else if (commandArgs[0].equals("searchStoreSongArtist")) {
+					userInput = commandArgs[1].strip();
+					this.searchStoreSongArtist(userInput);
+					
+				// SEARCH THE STORE FOR ALBUM BY TITLE
+				} else if (commandArgs[0].equals("searchStoreAlbumTitle")) {
+					userInput = commandArgs[1].strip();
+					this.searchStoreAlbumTitle(userInput);
+					
+				// SEARCH THE STORE FOR ALBUM BY ARTIST
+				} else if (commandArgs[0].equals("searchStoreAlbumArtist")) {
+					userInput = commandArgs[1].strip();
+					this.searchStoreAlbumArtist(userInput);
 					
 				// ADD SONG
 				} else if (commandArgs[0].equals("addSong")) {

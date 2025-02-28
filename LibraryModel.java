@@ -95,6 +95,18 @@ public class LibraryModel {
 		return foundAlbums;
 	}
 	
+	
+	public ArrayList<Playlist> searchPlaylist(String playlistName) {
+		ArrayList<Playlist> newList = new ArrayList<Playlist>();
+		
+		for (Playlist p : playlists) {
+			if (p.getName().toLowerCase().equals(playlistName.toLowerCase())) {
+				newList.add(p);
+			}
+		}
+		
+		return newList;
+	}
 	/*
 	 * Method: hasAlbum(title)
 	 * Purpose: check if an album with name title is found
@@ -404,5 +416,9 @@ public class LibraryModel {
 		}
 		
 		return false;
+	}
+	
+	public MusicStore getStore() {
+		return this.store;
 	}
 }
