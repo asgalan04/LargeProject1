@@ -13,11 +13,11 @@ public class LibraryModel {
 	private MusicStore store;
 	
 	/*
-	 * Store needs: getSong(), getAlbums() - returns shallow reference, getAlbum()
-	 * Album needs: getName(), getArtist(), getYear(), getSongs() - shallow reference
+	 * Store needs: getSong(), getAlbums() - returns deep reference, searchAlbum() - search for and return copy of album
+	 * Album needs: getName(), getArtist(), getYear(), getSongs() - deep reference
 	 * addSong() - yes this makes mutable but we should be fine with references because I
 	 * create copies when adding albums to the user.
-	 * Song needs: getName(), getArtist(), getAlbum(), isFavorite()
+	 * Song needs: getName(), getArtist(), getAlbum(), isFavorite(), setFavorite(), setRating()
 	 */
 	
 	
@@ -28,23 +28,10 @@ public class LibraryModel {
 	}
 	
 	/*
-	 * Method: printsongs(songs)
-	 * Purpose: print the songs in nice format from an input arraylist
+	 * Method: searchSongTitle(title)
+	 * Purpose: search for a song by title and return a list of found songs
 	 */
-	private void printSongs(ArrayList<Song> songs) {
-		for (Song s : songs) {
-			String printedString = "Song: " + s.getName()
-									+ " by " + s.getArtist()
-									 + " from the album " + s.getAlbum();
-			System.out.println(printedString);
-		}
-	}
-	
-	/*
-	 * Method: getSongTitle(title)
-	 * Purpose: search for a song by title and print its attributes
-	 */
-	public void getSongTitle(String title) {
+	public ArrayList<Song> searchSongTitle(String title) {
 		
 		ArrayList<Song> foundSongs = new ArrayList<Song>();
 		for (Album a : albumList) {
@@ -54,92 +41,57 @@ public class LibraryModel {
 			}
 		}
 		
-		if (foundSongs.size() == 0) {
-			System.out.println("Song not found in player's library.");
-			return;
-		}
-		
-		printSongs(foundSongs);
+		return foundSongs;
 	}
 	
 	/*
-	 * Method: getSongArtist(artist)
-	 * Purpose: search for a song by artist and print its attributes
+	 * Method: searchSongArtist(artist)
+	 * Purpose: search for a song by artist and return a list of found songs
 	 */
-	public void getSongArtist(String artist) {
+	public ArrayList<Song> searchSongArtist(String artist) {
 		
 		ArrayList<Song> foundSongs = new ArrayList<Song>();
 		for (Album a : albumList) {
-			if (a.getArtist().equals(artist)) {
+			if (a.getArtist().toLowerCase().equals(artist.toLowerCase())) {
 				for (Song s : a.getSongs()) {
 					foundSongs.add(s);
 				}
 			}
 		}
-		
-		if (foundSongs.size() == 0) {
-			System.out.println("Artist not found in player's library.");
-			return;
-		}
-		
-		printSongs(foundSongs);
+
+		return foundSongs;
 	}
 	
 	/*
-	 * Method: printAlbums(albums)
-	 * Purpose: Take an arraylist of albums and print their attributes and contents
-	 */
-	private void printAlbums(ArrayList<Album> albums) {
-		for (Album a : albums) {
-			System.out.println("Album: " + a.getName()
-								+ " by " + a.getArtist()
-								+ " from the year " + a.getYear());
-			for (Song s : a.getSongs()) {
-				System.out.println(s.getName());
-			}
-		}
-	}
-	
-	/*
-	 * Method: getAlbumTitle(albumName)
+	 * Method: searchAlbumTitle(albumName)
 	 * Purpose: search for an album by name and print its contents
 	 */
-	public void getAlbumTitle(String albumName) {
+	public ArrayList<Album> searchAlbumTitle(String albumName) {
 		
 		ArrayList<Album> foundAlbums = new ArrayList<Album>();
 		for (Album a : albumList) {
-			if (a.getName().equals(albumName)) {
+			if (a.getName().toLowerCase().equals(albumName.toLowerCase())) {
 				foundAlbums.add(a);
 			}
 		}
 		
-		if (foundAlbums.size() == 0) {
-			System.out.println("Album not found in player's library.");
-			return;
-		}
-		
-		printAlbums(foundAlbums);
+		return foundAlbums;
 	}
 	
 	/*
-	 * Method: getAlbumArtist(artistName)
+	 * Method: searchAlbumArtist(artistName)
 	 * Purpose: search for an album by artist and print its contents
 	 */
-	public void getAlbumArtist(String artistName) {
+	public ArrayList<Album> searchAlbumArtist(String artistName) {
 		
 		ArrayList<Album> foundAlbums = new ArrayList<Album>();
 		for (Album a : albumList) {
-			if (a.getArtist().equals(artistName)) {
+			if (a.getArtist().toLowerCase().equals(artistName.toLowerCase())) {
 				foundAlbums.add(a);
 			}
 		}
 		
-		if (foundAlbums.size() == 0) {
-			System.out.println("Album not found in player's library.");
-			return;
-		}
-		
-		printAlbums(foundAlbums);
+		return foundAlbums;
 	}
 	
 	/*
@@ -150,7 +102,7 @@ public class LibraryModel {
 	private boolean hasAlbum(String title) {
 		
 		for (Album a : albumList) {
-			if (a.getName().equals(title)) {
+			if (a.getName().toLowerCase().equals(title.toLowerCase())) {
 				return true;
 			}
 		}
@@ -166,7 +118,7 @@ public class LibraryModel {
 	private boolean hasSong(Album a, String title) {
 		
 		for (Song s : a.getSongs()) {
-			if (s.getName().equals(title)) {
+			if (s.getName().toLowerCase().equals(title.toLowerCase())) {
 				return true;
 			}
 		}
@@ -179,13 +131,12 @@ public class LibraryModel {
 	 * Purpose: add a song to the user library into the appropriate album,
 	 * make the album if there isn't one already
 	 */
-	public void addSong(String title) {
+	public boolean addSong(String title) {
 		
-		Song foundSong = store.getSong();
+		Song foundSong = store.searchSong(title);
 		
 		if (foundSong == null) {
-			System.out.println("Song isn't found in the music store.");
-			return;
+			return false;
 		}
 		
 		// If the album isn't in our library, we make it
@@ -201,11 +152,12 @@ public class LibraryModel {
 			if (a.getName().equals(foundSong.getAlbum().getName())) {
 				if (!hasSong(a, foundSong.getName())) {
 					a.addSong(foundSong);
-				} else {
-					System.out.println("Song is already in library.");
-				}
+					return true;
+				} 
 			}
 		}
+		
+		return false;
 	}
 	
 	/*
@@ -213,13 +165,12 @@ public class LibraryModel {
 	 * Purpose: add an entire album to the user's library, if its in the store
 	 * and not already in the user's library
 	 */
-	public void addAlbum(String title) {
+	public boolean addAlbum(String title) {
 		
-		Album foundAlbum = store.getAlbum(title);
+		Album foundAlbum = store.searchAlbum(title);
 		
 		if (foundAlbum == null) {
-			System.out.println("Album isn't found in the music store.");
-			return;
+			return false;
 		}
 		
 		if (!hasAlbum(title)) {
@@ -231,161 +182,176 @@ public class LibraryModel {
 				newAlbum.addSong(s);
 			}
 			
-		} else {
-			System.out.println("Album is already in library.");
-		}
+			return true;
+		} 
+		
+		return false;
 	}
 	
 	/*
 	 * Method: getSongTitles()
 	 * Purpose: print to the user a list of song titles
 	 */
-	public void getSongTitles() {
+	public ArrayList<String> getSongTitles() {
 
-		if (albumList.size() == 0) {
-			System.out.print("No songs in library.");
-			return;
-		}
-		
-		System.out.println("-----------------\n      Songs\n-----------------");
+		ArrayList<String> songs = new ArrayList<String>();
 		
 		for (Album a : albumList) {
 			for (Song s : a.getSongs()) {
-				System.out.println(s.getName());
+				songs.add(s.getName());
 			}
 		}
 		
-		System.out.println("-----------------");
+		return songs;
 	}
 	
 	/*
 	 * Method: getArtists()
 	 * Purpose: print to the user a list of artists
 	 */
-	public void getArtists() {
+	public ArrayList<String> getArtists() {
 		ArrayList<String> printedArtists = new ArrayList<String>();
-		
-		if (albumList.size() == 0) {
-			System.out.print("No artists in library.");
-			return;
-		}
-		
-		System.out.println("-----------------\n     Artists\n-----------------");
 		
 		for (Album a : albumList) {
 			if (!printedArtists.contains(a.getArtist())) {
-				System.out.println(a.getArtist());
 				printedArtists.add(a.getArtist());
 			}
 		}
 		
-		System.out.println("-----------------");
+		return printedArtists;
 	}
 	
 	/*
 	 * Method: getAlbums()
 	 * Purpose: print to the user a list of albums
 	 */
-	public void getAlbums() {
+	public ArrayList<Album> getAlbums() {
 		
-		if (albumList.size() == 0) {
-			System.out.print("No albums in library.");
-			return;
-		}
-		
-		System.out.println("------------------\n      Albums\n------------------");
-		
+		ArrayList<Album> albumList = new ArrayList<Album>();
+
 		for (Album a : albumList) {
-			System.out.println(a.getName() + " by " + a.getArtist());
+			albumList.add(new Album(/*TODO: ALBUM CONSTRUCTOR*/))
 		}
 		
-		System.out.println("------------------");
+		return albumList;
 	}
 	
 	/*
 	 * Method: getPlaylists()
 	 * Purpose: print to the user their list of playlists
 	 */
-	public void getPlaylists() {
+	public ArrayList<String> getPlaylists() {
 		
-		if (playlists.size() == 0) {
-			System.out.println("No playlists in library.");
-			return;
-		}
-		
-		System.out.println("-----------------\n    Playlists\n-----------------");
+		ArrayList<String> playlistNames = new ArrayList<String>();
 		
 		for (Playlist p : playlists) {
-			System.out.println(p.getName());
+			playlistNames.add(p.getName());
 		}
 		
-		System.out.println("-----------------");
+		return playlistNames;
 	}
 	
 	/*
 	 * Method: getSongsInPlaylist(title)
 	 * Purpose: print out the songs in a playlist
 	 */
-	public void getSongsInPlaylist(String title) {
+	public ArrayList<String> getSongsInPlaylist(String title) {
 		
-		if (playlists.size() == 0) {
-			System.out.println("No playlists in library.");
-			return;
-		}
+		ArrayList<String> songs = new ArrayList<String>();
 		
 		for (Playlist p : playlists) {
-			if (p.getName().equals(title)) {
-				System.out.println("-----------------\n Songs in " + p.getName() + "\n-----------------");
-				printSongs(p.getSongs());
+			if (p.getName().toLowerCase().equals(title.toLowerCase())) {
+				for (Song s : p.getSongs()) {
+					songs.add(s.getName());
+				}
 			}
 		}
 		
-		System.out.println("-----------------");
+		return songs;
 	}
 	
 	/*
 	 * Method: getFavoriteSongs()
 	 * Purpose: print out the users favorite songs
 	 */
-	public void getFavoriteSongs() {
+	public ArrayList<String> getFavoriteSongs() {
 		
-		if (albumList.size() == 0) {
-			System.out.print("No songs in library.");
-			return;
-		}
-		
-		System.out.println("------------------\n  Favorite Songs\n------------------");
+		ArrayList<String> favSongs = new ArrayList<String>();
 		
 		for (Album a : albumList) {
 			for (Song s : a.getSongs()) {
 				if (s.isFavorite()) {
-					System.out.println(s.getName());
+					favSongs.add(s.getName());
 				}
 			}
 		}
 		
-		System.out.println("------------------");
+		return favSongs;
 	}
 	
 	/*
 	 * Method: createPlaylist(name)
 	 * Purpose: creates a new playlist with name
 	 */
-	public void createPlaylist(String name) {
+	public boolean createPlaylist(String name) {
+		
+		for (Playlist p : playlists) {
+			if (p.getName().toLowerCase().equals(name.toLowerCase())) {
+				return false;
+			}
+		}
+		
 		playlists.add(new Playlist(name));
+		return true;
 	}
 	
 	/*
 	 * Method: removePlaylist(name)
 	 * Purpose: removes a playlist with name
 	 */
-	public void removePlaylist(String name) {
+	public boolean removePlaylist(String name) {
 		for (Playlist p : playlists) {
-			if (p.getName().equals(name)) {
+			if (p.getName().toLowerCase().equals(name.toLowerCase())) {
 				playlists.remove(p);
+				return true;
 			}
 		}
+		return false;
 	}
 	
+	/*
+	 * Method: rateSong
+	 * Purpose: search for a song by title and artist and assign it a rating
+	 */
+	public boolean rateSong(String songName, String artist, int rating) {
+		
+		ArrayList<Song> songsWithName = this.searchSongTitle(songName);
+		
+		for (Song s : songsWithName) {
+			if (s.getArtist().toLowerCase().equals(artist.toLowerCase())) {
+				s.setRating(rating);
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
+	/*
+	 * Method: setFavorite()
+	 * Purpose: search for a song by title and artist and set to favorite or unfavorite
+	 */
+	public boolean setFavorite(String songName, String artist, boolean favorite) {
+		
+		ArrayList<Song> songsWithName = this.searchSongTitle(songName);
+		
+		for (Song s : songsWithName) {
+			if (s.getArtist().toLowerCase().equals(artist.toLowerCase())) {
+				s.setFavorite(favorite);
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
