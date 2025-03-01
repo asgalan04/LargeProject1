@@ -128,17 +128,21 @@ public class Album {
 	}
 	
 	@Override
+	
+	/*
+	 * checks if one album is the same as other album
+	 */
 	public boolean equals(Object obj) {
 	    Album other = (Album) obj;
 	    
 	    if (albumName.equals(other.getAlbumName()) && authorName.equals(other.getAuthorName()) &&
 	        genre.equals(other.getGenre()) && year == other.getYear() &&
 	        songsCollection.size() == other.getSongs().size()) {
-	        for (int i = 0; i < songsCollection.size(); i++) {
+	        for (int i = 0; i< songsCollection.size(); i++) {
 	            if (!songsCollection.get(i).equals(other.getSongs().get(i))) {
 	                return false;
 	            }
-	        	}
+	        }
 	        return true; 
 	    	}
 
