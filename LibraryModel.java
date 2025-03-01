@@ -38,7 +38,6 @@ public class LibraryModel {
 			Song songSearch = a.getSong(title);
 			if (songSearch != null) {
 				foundSongs.add(songSearch);
-				System.out.println("TEST searchSongTitle: " + Boolean.toString(songSearch.isFavorite()));
 			}
 		}
 		
@@ -315,7 +314,6 @@ public class LibraryModel {
 			for (Song s : a.getSongs()) {
 				if (s.isFavorite()) {
 					favSongs.add(s.getName());
-					System.out.println("TEST getFavoriteSongs: " + Boolean.toString(s.isFavorite()));
 				}
 			}
 		}
