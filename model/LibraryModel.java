@@ -12,15 +12,6 @@ public class LibraryModel {
 	private ArrayList<Playlist> playlists;
 	private MusicStore store;
 	
-	/*
-	 * Store needs: getAlbums() - returns deep reference, searchAlbum() - search for and return copy of album
-	 * Album needs: getName(), getArtist(), getYear(), getSongs() - deep reference
-	 * addSong() - yes this makes mutable but we should be fine with references because I
-	 * create copies when adding albums to the user.
-	 * Song needs: getName(), getArtist(), getAlbum(), isFavorite(), setFavorite(), setRating()
-	 */
-	
-	
 	public LibraryModel() {
 		albumList = new ArrayList<Album>();
 		playlists = new ArrayList<Playlist>();
@@ -95,6 +86,10 @@ public class LibraryModel {
 	}
 	
 	
+	/*
+	 * Method: searchPlaylist
+	 * Purpose: search for a playlist with name and return a lists of playlists with playlistName
+	 */
 	public ArrayList<Playlist> searchPlaylist(String playlistName) {
 		ArrayList<Playlist> newList = new ArrayList<Playlist>();
 		
@@ -344,6 +339,11 @@ public class LibraryModel {
 		return false;
 	}
 	
+	
+	/*
+	 * Method: addToPlaylist
+	 * Purpose: add a song by title and artist into a playlist
+	 */
 	public boolean addToPlaylist(String playlist, String name, String artist) {
 		ArrayList<Song> foundSongs = this.searchSongTitle(name);
 		
@@ -368,6 +368,10 @@ public class LibraryModel {
 		return false;
 	}
 	
+	/*
+	 * Method: removeFromPlaylist
+	 * Purpose: remove a song by title from a playlist
+	 */
 	public boolean removeFromPlaylist(String playlist, String name) {
 		
 		for (Playlist p : playlists) {
