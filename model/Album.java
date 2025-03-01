@@ -95,6 +95,12 @@ public class Album {
 		return curr;
 	}
 	
+	/*
+	 * sets a song to favorite or unfavorite given 
+	 * a boolean value return true if value was set
+	 * false if song not found 
+	 */
+	
 	public boolean setFavorite(String songName, boolean favorite) {
 		for (Song s : songsCollection) {
 			if (s.getName().toLowerCase().equals(songName.toLowerCase())) {
@@ -105,6 +111,12 @@ public class Album {
 		return false;
 	}
 	
+	/*
+	 * rates a song given the song name and rating
+	 * return true if was able to set false if
+	 * song not found 
+	 */
+	
 	public boolean rateSong(String songName, int rating) {
 		for (Song s : songsCollection) {
 			if (s.getName().toLowerCase().equals(songName.toLowerCase())) {
@@ -114,25 +126,27 @@ public class Album {
 		}
 		return false;
 	}
-	/*
-	 * Compares if to albums are the same
-	 */
+	
 	@Override
+	
+	/*
+	 * checks if one album is the same as other album
+	 */
 	public boolean equals(Object obj) {
-	    Album first = (Album) obj;
-	    if (first.getAlbumName().equals(albumName) && first.getAuthorName().equals(authorName) &&
-	    		first.getGenre().equals(genre) &&  first.getYear() == year) {
-	    	for (int i = 0; i < first.getSongs().size(); i++) {
-		        if (!first.getSongs().get(i).equals(songsCollection.get(i))) {
-		            return false;
-		        }
-	    }
-	    if (first.getSongs().size() != songsCollection.size()) {
-	   
-	}
-	    }
-		return true;
-	}
+	    Album other = (Album) obj;
+	    
+	    if (albumName.equals(other.getAlbumName()) && authorName.equals(other.getAuthorName()) &&
+	        genre.equals(other.getGenre()) && year == other.getYear() &&
+	        songsCollection.size() == other.getSongs().size()) {
+	        for (int i = 0; i< songsCollection.size(); i++) {
+	            if (!songsCollection.get(i).equals(other.getSongs().get(i))) {
+	                return false;
+	            }
+	        }
+	        return true; 
+	    	}
+
+	    return false; 
+			}
+
 }
-
-

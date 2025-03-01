@@ -10,7 +10,9 @@ public class MusicStore {
 	
 	
 	public MusicStore() {
+		
 		albums=new ArrayList<Album>();
+		//creates a the lists of filenames from given file
 		ArrayList<File> curr=new ArrayList<File>();
 		try {
 			curr=processAlbums("src/albumFiles/albums.txt");
@@ -19,6 +21,7 @@ public class MusicStore {
 		}
 		for (File file: curr) {
 			try {
+				//reads all of the files and creates the albums
 				readAlbumFile(file);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -26,6 +29,11 @@ public class MusicStore {
 		}
 			
 	}
+	
+	/*
+	 * Search the songs by name and return a list of the
+	 * song objects with the same name
+	 */
 	
 	public ArrayList<Song> searchSong(String songName) {
 		ArrayList<Song> foundSongs = new ArrayList<Song>();
@@ -36,6 +44,10 @@ public class MusicStore {
 		}
 		return foundSongs;
 	}
+	
+	/*
+	 *Gets the list of albums and returns a deep copy
+	 */
 
 	public ArrayList<Album> getAlbums(){
 		ArrayList<Album> deepCopy=new ArrayList<Album>();
@@ -51,7 +63,11 @@ public class MusicStore {
 		return deepCopy;
 	}
 	
-	//new object 
+	/*
+	 * Search the Album by name and return a list of the
+	 * Album objects with the same name
+	 */
+	
 	public ArrayList<Album> searchAlbum(String albumName) {
 		ArrayList<Album> foundAlbums = new ArrayList<Album>();
 		
@@ -70,8 +86,13 @@ public class MusicStore {
 		
 	}
 	
+	/*
+	 * Reads input from the file and converts into and album
+	 */
+	
 	public void readAlbumFile(File fileName) throws FileNotFoundException {
 		Scanner scan=new Scanner(fileName);
+		//reads the first line gets album title,artist,genre,year
 		String [] attributes= scan.nextLine().split(",");
 		String albumTitle=attributes[0];
 		String Artist=attributes[1]; 
@@ -87,6 +108,11 @@ public class MusicStore {
 		
 	}
 	
+	/*
+	 * searches song by artist and returns an arrayList of songs
+	 * with the same name
+	 */
+	
 	public ArrayList<Song> searchSongArtist(String artist) {
 		
 		ArrayList<Song> foundSongs = new ArrayList<Song>();
@@ -101,6 +127,11 @@ public class MusicStore {
 		return foundSongs;
 	}
 	
+	/*
+	 * search song by artist and return a list of 
+	 * albums that share the artist names
+	 */
+	
 	
     public ArrayList<Album> searchAlbumArtist(String artistName) {
 		
@@ -113,6 +144,12 @@ public class MusicStore {
 		
 		return foundAlbums;
 	}
+    
+    /*
+     * processes A file that contains the author and the name of
+     * the album and converts into a text file to acess its data later
+  
+     */
 	
 	public ArrayList<File> processAlbums(String fileName) throws FileNotFoundException {
 		ArrayList<File> fileNames=new ArrayList<File>();
