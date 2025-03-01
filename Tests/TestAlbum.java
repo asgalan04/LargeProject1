@@ -1,0 +1,116 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import model.Album;
+import model.Playlist;
+import model.Song;
+
+class TestAlbum {
+	
+	private Album TitoAlbum;
+	private Album PesoAlbum;
+	private Album copyAlbum;
+	private Song Song1;
+	private Song Song2;
+	private Song Song3;
+	private Song Song4;
+	
+	@BeforeEach
+    void setUp() {
+        TitoAlbum=new Album("Tito","Incomodo",2024,"pop");
+        PesoAlbum=new Album("Peso","Genesis",2024,"pop");
+        copyAlbum=new Album("Tito","Incomodo",2024,"pop");
+        Song1=new Song("Tu si","Tito","Incomodo");
+        Song2=new Song("Gervonta","Peso","Genesis");
+        Song3=new Song("Hollywood","Peso","Genesis");
+        Song4=new Song("ella","Tito","Incomodo");
+        TitoAlbum.addSong(Song1);
+        TitoAlbum.addSong(Song4);
+        copyAlbum.addSong(Song1);
+        copyAlbum.addSong(Song4);
+        PesoAlbum.addSong(Song2);
+        PesoAlbum.addSong(Song3);
+        
+   
+        
+        
+    }
+
+	@Test
+	void testToString() {
+		String titoString=PesoAlbum.toString();
+		String message="";
+		message+="Album : '" + "Genesis" + "' by '"+"Peso"+ "', Genre '"+"pop"+
+		"'. From the year : "+ 2024+"\n";
+		message+=Song2.getName()+"\n"+Song3.getName()+"\n";
+		Assertions.assertEquals(message,titoString);
+	
+		
+		
+	}
+	@Test
+	void testGetSong() {
+		Song titos=TitoAlbum.getSong("Tu si");
+		Assertions.assertEquals(titos,Song1);
+		
+		
+	}
+	
+	@Test
+	void getAlbumName() {
+		Assertions.assertEquals(PesoAlbum.getAlbumName(),"Genesis");
+		
+	}
+	
+	@Test
+	void TestGetGenre() {
+		Assertions.assertEquals(PesoAlbum.getGenre(),"pop");
+		
+	}
+	
+	@Test
+	void Testyear() {
+		Assertions.assertEquals(PesoAlbum.getYear(),2024);
+		
+	}
+	
+	@Test 
+	void getSongs() {
+		ArrayList<Song> pesoSongs=PesoAlbum.getSongs();
+		Assertions.assertEquals(pesoSongs.get(0),Song2);
+		Assertions.assertEquals(pesoSongs.get(1),Song3);
+		
+		
+	}
+	
+	@Test 
+	void testFavorite() {
+		boolean value=PesoAlbum.setFavorite("Hollywood", true);
+		boolean notvalue=PesoAlbum.setFavorite("other", true);
+		Assertions.assertFalse(notvalue);
+		Assertions.assertTrue(value);
+		
+	}
+	
+	@Test 
+	void testRateSong() {
+		boolean value=PesoAlbum.rateSong("Hollywood", 5);
+		boolean notvalue=PesoAlbum.setFavorite("other", true);
+		Assertions.assertFalse(notvalue);
+		Assertions.assertTrue(value);
+		
+
+		
+	}
+	@Test
+	void testEquals() {
+		assertTrue(TitoAlbum.equals(copyAlbum));
+	}
+
+
+}
