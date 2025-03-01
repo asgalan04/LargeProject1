@@ -448,11 +448,11 @@ public class UserInterface {
 		
 		System.out.println("Welcome to your music library. Type 'manual' or 'help' for a list of commands. Type 'quit' to exit.");
 		
-		while (input.hasNext()) {
+		while (input.hasNextLine()) {
 			String userInput = input.nextLine();
 			String[] commandArgs = userInput.split("\\s+", 2);
 			
-			if (commandArgs.length == 0) {
+			if (commandArgs.length == 0 || commandArgs[0].equals("")) {
 				System.out.println("No command entered.");
 				
 			// SINGLE WORD COMMANDS
@@ -590,6 +590,7 @@ public class UserInterface {
 						System.out.println("Invalid arguments. Expected format: 'rateSong <songName>, <songArtist>, <rating (1-5)>'");
 					}
 					
+					
 				// ADD TO PLAYLIST
 				} else if (commandArgs[0].equals("addToPlaylist")) {
 					userInput = commandArgs[1].strip();
@@ -627,6 +628,7 @@ public class UserInterface {
 		
 		System.out.println("Exiting your music library.");
 		input.close();
+		System.exit(0);
 	}
 	
     private static boolean isInteger(String str) {
