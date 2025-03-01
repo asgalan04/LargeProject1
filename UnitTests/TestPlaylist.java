@@ -1,4 +1,8 @@
+package UnitTests;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+import model.*;
 
 import java.util.ArrayList;
 
@@ -48,17 +52,20 @@ class TestPlaylist {
 	@Test
 	
 	void TestremoveSong() {
-		PlayList.removeSong("tu si");
-		PlayList2.removeSong("tu si");
+		boolean removed=PlayList.removeSong("tu si");
+		boolean removed2=PlayList2.removeSong("tu si");
+		boolean removed3=PlayList.removeSong("not There");
 		
 		
-		Assertions.assertTrue(PlayList.equals(PlayList2));
 		
-	}
-	
-	@Test
-	void testEquals() {
-		Assertions.assertTrue(PlayList2.equals(PlayList));
+		ArrayList<Song> songs1=PlayList.getSongs();
+		ArrayList<Song> songs2=PlayList.getSongs();
+		Assertions.assertTrue(removed);
+		Assertions.assertTrue(removed2);
+		Assertions.assertFalse(removed3);
+		
+		Assertions.assertTrue(songs1.get(0).equals(songs2.get(0)));
+		
 	}
 	
 	

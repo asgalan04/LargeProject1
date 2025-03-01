@@ -1,6 +1,8 @@
-package model;
+package UnitTests;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import model.*;
 
 import java.util.ArrayList;
 
