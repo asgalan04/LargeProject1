@@ -1,4 +1,4 @@
-package model;
+package UnitTests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,15 +8,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import model.Album;
-import model.Playlist;
-import model.Song;
+import model.*;
 
 class TestAlbum {
 	
 	private Album TitoAlbum;
 	private Album PesoAlbum;
 	private Album copyAlbum;
+	private Album similarAlbum;
+	private Album similarAlbum2;
+	private Album similarAlbum3;
 	private Song Song1;
 	private Song Song2;
 	private Song Song3;
@@ -28,6 +29,9 @@ class TestAlbum {
         TitoAlbum=new Album("Tito","Incomodo",2024,"pop");
         PesoAlbum=new Album("Peso","Genesis",2024,"pop");
         copyAlbum=new Album("Tito","Incomodo",2024,"pop");
+        similarAlbum=new Album("Tito", "Genesis", 2024, "pop");
+        similarAlbum2=new Album("Tito", "Genesis", 2023, "pop");
+        similarAlbum3=new Album("Tito", "Genesis", 2023, "rock");
         Song1=new Song("Tu si","Tito","Incomodo");
         Song2=new Song("Gervonta","Peso","Genesis");
         Song3=new Song("Hollywood","Peso","Genesis");
@@ -121,5 +125,17 @@ class TestAlbum {
 		assertTrue(TitoAlbum.equals(copyAlbum));
 	}
 
-
+	@Test
+	void testEquals2() {
+		copyAlbum.addSong(Song5);
+		TitoAlbum.addSong(Song3);
+		assertFalse(TitoAlbum.equals(copyAlbum));
+	}
+	
+	@Test
+	void testEquals3() {
+		assertFalse(TitoAlbum.equals(similarAlbum));
+		assertFalse(TitoAlbum.equals(similarAlbum2));
+		assertFalse(similarAlbum.equals(similarAlbum3));
+	}
 }
