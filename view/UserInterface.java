@@ -437,7 +437,7 @@ public class UserInterface {
 		System.out.println("  'printFavorites' - prints all favorited songs in user library.\n");
 		System.out.println("RATING");
 		System.out.println("  'favoriteSong <songName>, <songArtist>, <favorite/unfavorite>' - favorites/unfavorites a song with name 'songName' and 'songArtist'.");
-		System.out.println("  'rateSong <songName> <songArtist> <rating (1-5)>' - rates a song (1-5) with name 'songName' and 'songArtist'.\n");
+		System.out.println("  'rateSong <songName>, <songArtist>, <rating (1-5)>' - rates a song (1-5) with name 'songName' and 'songArtist'.\n");
 		System.out.println("TYPE 'quit' TO QUIT");
 		System.out.println("------------------------");
 	}
