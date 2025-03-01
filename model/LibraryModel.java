@@ -32,7 +32,7 @@ public class LibraryModel {
 	 * Purpose: search for a song by title and return a list of found songs
 	 */
 	public ArrayList<Song> searchSongTitle(String title) {
-		
+
 		ArrayList<Song> foundSongs = new ArrayList<Song>();
 		for (Album a : albumList) {
 			Song songSearch = a.getSong(title);
@@ -189,10 +189,8 @@ public class LibraryModel {
 		
 		Album foundAlbum = foundAlbums.get(0);
 		
-		boolean albumFlag = false;
 		for (Album a : albumList) {
 			if (a.getAlbumName().equals(foundAlbum.getAlbumName())) {
-				albumFlag = true;
 				for (Song s : foundAlbum.getSongs()) {
 					if (!hasSong(a, s.getName())) {
 						a.addSong(s);
@@ -202,19 +200,14 @@ public class LibraryModel {
 			}
 		}
 		
-		if (!albumFlag) {
-			
-			Album newAlbum = new Album(foundAlbum.getAuthorName(), foundAlbum.getAlbumName(), foundAlbum.getYear(), foundAlbum.getGenre());
-			albumList.add(newAlbum);
-			
-			for (Song s : foundAlbum.getSongs()) {
-				newAlbum.addSong(s);
-			}
-			
-			return true;
-		} 
+		Album newAlbum = new Album(foundAlbum.getAuthorName(), foundAlbum.getAlbumName(), foundAlbum.getYear(), foundAlbum.getGenre());
+		albumList.add(newAlbum);
 		
-		return false;
+		for (Song s : foundAlbum.getSongs()) {
+			newAlbum.addSong(s);
+		}
+		
+		return true;
 	}
 	
 	/*
@@ -258,14 +251,14 @@ public class LibraryModel {
 		
 		ArrayList<Album> newList = new ArrayList<Album>();
 
-		for (Album a : newList) {
-			albumList.add(new Album(a.getAuthorName(), a.getAlbumName(), a.getYear(), a.getGenre()));
+		for (Album a : albumList) {
+			newList.add(new Album(a.getAuthorName(), a.getAlbumName(), a.getYear(), a.getGenre()));
 			for (Song s : a.getSongs()) {
 				a.addSong(s);
 			}
 		}
 		
-		return albumList;
+		return newList;
 	}
 	
 	/*
