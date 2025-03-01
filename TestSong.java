@@ -57,5 +57,15 @@ class TestSong {
 	void testEquals() {
 		Assertions.assertTrue(Song1.equals(Song3));
 	}
+	
+	@Test 
+	void setRating() {
+		Song1.setRating(5);
+		Song2.setRating(2);
+		
+		Assertions.assertEquals(Song1.getRating(),5);
+		Assertions.assertEquals(Song2.getRating(),2);
+	}
+
 
 }
